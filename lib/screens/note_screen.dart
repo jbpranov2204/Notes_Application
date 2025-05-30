@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/notes_controller.dart';
-import '../models/note.dart'; // Update import path
+import '../models/note.dart'; 
 
 class NoteScreen extends GetView<NotesController> {
   const NoteScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Clear controllers when creating new note
     if (Get.parameters['id'] == null) {
       controller.titleController.clear();
       controller.contentController.clear();

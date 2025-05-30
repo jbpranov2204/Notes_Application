@@ -15,7 +15,6 @@ class NotesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Initialize with some sample data
     addNote('Welcome to Notes', 'Start writing your thoughts here...');
   }
 
@@ -90,7 +89,7 @@ class NotesController extends GetxController {
         notes.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
         break;
     }
-    searchNotes(searchQuery.value); // Refresh filtered notes
+    searchNotes(searchQuery.value);
   }
 
   void clearForm() {
