@@ -220,9 +220,26 @@ class HomeScreen extends GetView<NotesController> {
           ),
         );
         if (result == true) {
+          // Store note temporarily and show undo option
           controller.deleteNote(note.id);
+          Get.showSnackbar(
+            GetSnackBar(
+              message: 'Note deleted',
+              mainButton: TextButton(
+                onPressed: () {
+                  controller.restoreNote(note);
+                  Get.closeCurrentSnackbar();
+                },
+                child: const Text(
+                  'UNDO',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              duration: const Duration(seconds: 3),
+            ),
+          );
         }
-        return result;
+        return false; // We handle the dismissal manually
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -246,7 +263,7 @@ class HomeScreen extends GetView<NotesController> {
             splashColor: Colors.black,
             highlightColor: Colors.black,
             child: Theme(
-              data: ThemeData.light(), // Force light theme for note content
+              data: ThemeData.light(),
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -281,16 +298,14 @@ class HomeScreen extends GetView<NotesController> {
                             Icon(
                               Icons.edit_calendar,
                               size: 14,
-                              color: const Color(
-                                0xFF757575,
-                              ), // Fixed grey color
+                              color: const Color(0xFF757575),
                             ),
                             const SizedBox(width: 4),
                             Text(
                               'Created: ${DateFormat('MMM dd, yyyy').format(note.createdAt)}',
                               style: const TextStyle(
                                 fontSize: 12,
-                                color: Color(0xFF757575), // Fixed grey color
+                                color: Color(0xFF757575),
                               ),
                             ),
                           ],
@@ -302,13 +317,13 @@ class HomeScreen extends GetView<NotesController> {
                               Icons.update,
                               size: 14,
                               color: const Color(0xFF757575),
-                            ), // Fixed grey color
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               'Updated: ${DateFormat('MMM dd, yyyy').format(note.updatedAt)}',
                               style: const TextStyle(
                                 fontSize: 12,
-                                color: Color(0xFF757575), // Fixed grey color
+                                color: Color(0xFF757575),
                               ),
                             ),
                           ],

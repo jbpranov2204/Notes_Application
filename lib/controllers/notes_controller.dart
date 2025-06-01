@@ -34,6 +34,12 @@ class NotesController extends GetxController {
       updatedAt: DateTime.now(),
     );
     notes.add(note);
+    // Print note details to console
+    print('New Note Created:');
+    print('Title: ${note.title}');
+    print('Content: ${note.content}');
+    print('Created at: ${note.createdAt}');
+    print('-' * 50);
     clearForm();
   }
 
@@ -51,6 +57,14 @@ class NotesController extends GetxController {
 
   void deleteNote(String id) {
     notes.removeWhere((note) => note.id == id);
+  }
+
+  void restoreNote(Note note) {
+    notes.add(note);
+    if (searchQuery.isNotEmpty) {
+      searchNotes(searchQuery.value);
+    }
+    notes.refresh();
   }
 
   Note? getNoteById(String id) {
