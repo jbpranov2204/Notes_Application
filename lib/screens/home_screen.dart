@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../controllers/notes_controller.dart';
+import '../controllers/theme_controller.dart';
 import '../models/note.dart';
 
 class HomeScreen extends GetView<NotesController> {
   const HomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    final themeController = Get.find<ThemeController>();
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -27,23 +29,39 @@ class HomeScreen extends GetView<NotesController> {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'My Notes',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
               Obx(
                 () => Text(
                   '${controller.notes.length} notes',
-                  style: const TextStyle(fontSize: 14, color: Colors.black54),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.color?.withOpacity(0.7),
+                  ),
                 ),
               ),
             ],
           ),
           actions: [
+            Obx(
+              () => IconButton(
+                icon: Icon(
+                  themeController.isDarkMode
+                      ? Icons.dark_mode
+                      : Icons.light_mode,
+                  size: 28,
+                ),
+                onPressed: themeController.toggleTheme,
+              ),
+            ),
             IconButton(
               icon: const Icon(Icons.search, size: 28),
               onPressed: () {
@@ -231,30 +249,49 @@ class HomeScreen extends GetView<NotesController> {
                 children: [
                   Text(
                     note.title,
-                    style: Theme.of(context).textTheme.headlineMedium,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     note.content,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: const TextStyle(fontSize: 16, color: Colors.black54),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        Icons.access_time,
-                        size: 14,
-                        color: Colors.grey[600],
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.edit_calendar,
+                            size: 14,
+                            color: Colors.grey[600],
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            'Created: ${DateFormat('MMM dd, yyyy').format(note.createdAt)}',
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        DateFormat('MMM dd, yyyy').format(note.updatedAt),
-                        style: Theme.of(context).textTheme.labelSmall,
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Icon(Icons.update, size: 14, color: Colors.grey[600]),
+                          const SizedBox(width: 4),
+                          Text(
+                            'Updated: ${DateFormat('MMM dd, yyyy').format(note.updatedAt)}',
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
+                        ],
                       ),
                     ],
                   ),
