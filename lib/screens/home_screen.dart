@@ -79,8 +79,10 @@ class HomeScreen extends GetView<NotesController> {
                       children: [
                         TextField(
                           onChanged: controller.searchNotes,
+                          style: const TextStyle(color: Colors.black),
                           decoration: InputDecoration(
                             hintText: 'Search notes...',
+                            hintStyle: TextStyle(color: Colors.grey[400]),
                             prefixIcon: const Icon(Icons.search),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
