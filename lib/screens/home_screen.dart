@@ -227,7 +227,7 @@ class HomeScreen extends GetView<NotesController> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -238,64 +238,85 @@ class HomeScreen extends GetView<NotesController> {
           ],
         ),
         child: Material(
-          color: Colors.transparent,
+          color: const Color(0xFFFFFFFF),
+          borderRadius: BorderRadius.circular(16),
           child: InkWell(
             onTap: () => Get.toNamed('/note/${note.id}'),
             borderRadius: BorderRadius.circular(16),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    note.title,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+            splashColor: Colors.black,
+            highlightColor: Colors.black,
+            child: Theme(
+              data: ThemeData.light(), // Force light theme for note content
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      note.title,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    note.content,
-                    style: const TextStyle(fontSize: 16, color: Colors.black54),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.edit_calendar,
-                            size: 14,
-                            color: Colors.grey[600],
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Created: ${DateFormat('MMM dd, yyyy').format(note.createdAt)}',
-                            style: Theme.of(context).textTheme.labelSmall,
-                          ),
-                        ],
+                    const SizedBox(height: 8),
+                    Text(
+                      note.content,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black54,
                       ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Icon(Icons.update, size: 14, color: Colors.grey[600]),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Updated: ${DateFormat('MMM dd, yyyy').format(note.updatedAt)}',
-                            style: Theme.of(context).textTheme.labelSmall,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.edit_calendar,
+                              size: 14,
+                              color: const Color(
+                                0xFF757575,
+                              ), // Fixed grey color
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Created: ${DateFormat('MMM dd, yyyy').format(note.createdAt)}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Color(0xFF757575), // Fixed grey color
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.update,
+                              size: 14,
+                              color: const Color(0xFF757575),
+                            ), // Fixed grey color
+                            const SizedBox(width: 4),
+                            Text(
+                              'Updated: ${DateFormat('MMM dd, yyyy').format(note.updatedAt)}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Color(0xFF757575), // Fixed grey color
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

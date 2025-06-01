@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../controllers/notes_controller.dart';
-import '../models/note.dart'; 
+import '../models/note.dart';
 
 class NoteScreen extends GetView<NotesController> {
   const NoteScreen({super.key});
@@ -45,10 +46,10 @@ class NoteScreen extends GetView<NotesController> {
           elevation: 0,
           title: Text(
             isNewNote ? 'New Note' : 'Edit Note',
-            style: const TextStyle(
+            style: GoogleFonts.roboto(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Theme.of(context).textTheme.titleLarge?.color,
             ),
           ),
           actions: [
@@ -66,10 +67,15 @@ class NoteScreen extends GetView<NotesController> {
                   Get.back();
                 }
               },
-              icon: const Icon(Icons.check),
-              label: const Text('Save'),
-              style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.primary,
+              icon: Icon(
+                Icons.check,
+                color: Theme.of(context).textTheme.titleLarge?.color,
+              ),
+              label: Text(
+                'Save',
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.titleLarge?.color,
+                ),
               ),
             ),
             const SizedBox(width: 8),
@@ -107,7 +113,7 @@ class NoteScreen extends GetView<NotesController> {
                         fillColor: Colors.white,
                         contentPadding: const EdgeInsets.all(20),
                       ),
-                      style: const TextStyle(
+                      style: GoogleFonts.roboto(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
@@ -147,7 +153,7 @@ class NoteScreen extends GetView<NotesController> {
                           fillColor: Colors.white,
                           contentPadding: const EdgeInsets.all(20),
                         ),
-                        style: const TextStyle(
+                        style: GoogleFonts.roboto(
                           fontSize: 16,
                           color: Colors.black87,
                           height: 1.5,
