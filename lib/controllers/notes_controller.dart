@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/note.dart';
+import '../Helpers/database_helper.dart';
 
 class NotesController extends GetxController {
   final notes = <Note>[].obs;
@@ -15,17 +16,18 @@ class NotesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    addNote('Welcome to Notes', 'Start writing your thoughts here...');
+    loadNotes();
   }
 
-  @override
-  void onClose() {
-    titleController.dispose();
-    contentController.dispose();
-    super.onClose();
+  Future<void> loadNotes() async {
+    final allNotes = await NotesDatabase.instance.readAllNotes();
+    notes.value = allNotes;
+    if (notes.isEmpty) {
+      await addNote('Welcome to Notes', 'Start writing your thoughts here...');
+    }
   }
 
-  void addNote(String title, String content) {
+  Future<void> addNote(String title, String content) async {
     final note = Note(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       title: title,
@@ -33,49 +35,32 @@ class NotesController extends GetxController {
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
-    notes.add(note);
-    print('NEW NOTE:');
-    print('Title: ${note.title}');
-    print('Content: ${note.content}');
-    print('Created at: ${note.createdAt}');
-    print('Updated at: ${note.updatedAt}');
-    print('-' * 50);
+    await NotesDatabase.instance.createNote(note);
+    await loadNotes();
     clearForm();
   }
 
-  void updateNote(String id, String title, String content) {
-    final index = notes.indexWhere((note) => note.id == id);
-    if (index != -1) {
-      notes[index] = notes[index].copyWith(
+  Future<void> updateNote(String id, String title, String content) async {
+    final note = await NotesDatabase.instance.readNote(id);
+    if (note != null) {
+      final updatedNote = note.copyWith(
         title: title,
         content: content,
         updatedAt: DateTime.now(),
       );
-      final updatedNote = notes[index];
-      print('EDITED NOTE:');
-      print('Title: ${updatedNote.title}');
-      print('Content: ${updatedNote.content}');
-      print('Created at: ${updatedNote.createdAt}');
-      print('Updated at: ${updatedNote.updatedAt}');
-      print('-' * 50);
+      await NotesDatabase.instance.updateNote(updatedNote);
+      await loadNotes();
     }
     clearForm();
   }
 
-  void deleteNote(String id) {
-    notes.removeWhere((note) => note.id == id);
+  Future<void> deleteNote(String id) async {
+    await NotesDatabase.instance.deleteNote(id);
+    await loadNotes();
   }
 
-  void restoreNote(Note note) {
-    notes.add(note);
-    if (searchQuery.isNotEmpty) {
-      searchNotes(searchQuery.value);
-    }
-    notes.refresh();
-  }
-
-  Note? getNoteById(String id) {
-    final note = notes.firstWhereOrNull((note) => note.id == id);
+  Future<Note?> getNoteById(String id) async {
+    final note = await NotesDatabase.instance.readNote(id);
     if (note != null) {
       titleController.text = note.title;
       contentController.text = note.content;

@@ -203,9 +203,7 @@ class HomeScreen extends GetView<NotesController> {
         final result = await Get.dialog<bool>(
           AlertDialog(
             title: const Text('Delete Note?'),
-            content: const Text(
-              'Are you sure you want to permanently delete this note?',
-            ),
+            content: const Text('Are you sure you want to delete this note?'),
             actions: [
               TextButton(
                 onPressed: () => Get.back(result: false),
@@ -213,21 +211,20 @@ class HomeScreen extends GetView<NotesController> {
               ),
               TextButton(
                 onPressed: () => Get.back(result: true),
-                style: TextButton.styleFrom(foregroundColor: Colors.red),
                 child: const Text('Delete'),
               ),
             ],
           ),
         );
+
         if (result == true) {
-          // Store note temporarily and show undo option
-          controller.deleteNote(note.id);
+          await controller.deleteNote(note.id);
           Get.showSnackbar(
             GetSnackBar(
               message: 'Note deleted',
               mainButton: TextButton(
-                onPressed: () {
-                  controller.restoreNote(note);
+                onPressed: () async {
+                  await controller.addNote(note.title, note.content);
                   Get.closeCurrentSnackbar();
                 },
                 child: const Text(
@@ -239,7 +236,7 @@ class HomeScreen extends GetView<NotesController> {
             ),
           );
         }
-        return false; // We handle the dismissal manually
+        return false;
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
