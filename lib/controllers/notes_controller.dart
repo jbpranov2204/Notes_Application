@@ -34,11 +34,11 @@ class NotesController extends GetxController {
       updatedAt: DateTime.now(),
     );
     notes.add(note);
-    // Print note details to console
-    print('New Note Created:');
+    print('NEW NOTE:');
     print('Title: ${note.title}');
     print('Content: ${note.content}');
     print('Created at: ${note.createdAt}');
+    print('Updated at: ${note.updatedAt}');
     print('-' * 50);
     clearForm();
   }
@@ -51,6 +51,13 @@ class NotesController extends GetxController {
         content: content,
         updatedAt: DateTime.now(),
       );
+      final updatedNote = notes[index];
+      print('EDITED NOTE:');
+      print('Title: ${updatedNote.title}');
+      print('Content: ${updatedNote.content}');
+      print('Created at: ${updatedNote.createdAt}');
+      print('Updated at: ${updatedNote.updatedAt}');
+      print('-' * 50);
     }
     clearForm();
   }
